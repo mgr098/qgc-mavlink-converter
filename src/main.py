@@ -1,33 +1,48 @@
+from fileinput import filename
+import string
 import sys
 import json
 import logging
+import argparse
+
+from numpy import require
 from constants import * # TODO: change this, bad practice
 
 # inspired by github user @phrohdoh
 
-def verify_args():
-    """Parse and verify input arguments"""
-    # TODO:
-    # Verify string input type, and arg counts
+def parse_args():
+    #TODO: create better names
 
-    return sys.argv[1]
+    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Convert QGC .plan to .mavlink format")
+
+    parser.add_argument("filename", type=str, help="Usage: python3 main.py </path/to/file/>")
+    parser.add_argument("--out", type=str, help=".mavlink filename", default=DEFAULT_FILE_NAME)
+
+    args = parser.parse_args()
+
+    return args
+
 
 class Converter():
-    def __init__(self):
-        self.file_location = verify_args() #dont do this, should be independent from env
+    def __init__(self, filename, out):
+        self.filename = filename 
+        self.out = out
+
         self.lines = []
         self.qgc_plan = {}
 
     def main(self):
 
         self.verify_plan()
-
         self.convert_to_mavlink()
+
+        return
 
     def verify_plan(self):
         """Verifies plan format"""
         try:
-            with open(self.file_location) as f:
+            with open(self.filename) as f:
                 self.qgc_plan = json.load(f)
                 f.close()
         except FileNotFoundError:
@@ -41,6 +56,9 @@ class Converter():
         return tabs
 
     def convert_to_mavlink(self):
+
+        mav = MAVlink(LATEST_VERSION)
+
         """Converts plan to mavlink"""
         mav = [[], []]
         mav[0].append("QGC WPL" + LATEST_VERSION) # Add meta data
@@ -73,6 +91,16 @@ class Converter():
             
             f.close()
 
+"""MAVlink object"""
+class MAVlink():
+    def __init__(self, version) -> None:
+        self.header = "QGC WPL {}".format(version)
+
+    def main(self):
+        print(self.header)
+
 if __name__ == "__main__":
-    converter = Converter()
+    args = parse_args()
+
+    converter = Converter(args.filename, args.out)
     converter.main()

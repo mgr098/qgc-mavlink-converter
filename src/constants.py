@@ -1,2 +1,3 @@
 LATEST_VERSION = "120"
 TAKEOFF = 22
+DEFAULT_FILE_NAME = "output.mavlink"
