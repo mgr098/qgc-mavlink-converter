@@ -9,35 +9,28 @@ from numpy import append, require
 from constants import * # TODO: change this, bad practice
 
 # inspired by github user @phrohdoh
+# TODO: try without takeoff, try many different plans to test
 
 def parse_args():
     #TODO: create better names
-
+    # Add takeoff off option
     parser = argparse.ArgumentParser()
     parser = argparse.ArgumentParser(description="Convert QGC .plan to .mavlink format")
-
     parser.add_argument("filename", type=str, help="Usage: python3 main.py </path/to/file/>")
     parser.add_argument("--out", type=str, help=".mavlink filename", default=DEFAULT_FILE_NAME)
-
     args = parser.parse_args()
 
     return args
-
 
 class Converter():
     def __init__(self, filename, out):
         self.filename = filename 
         self.out = out
-
-        self.lines = []
         self.qgc_plan = {}
 
     def main(self):
-
         self.verify_plan()
         self.convert_to_mavlink()
-
-        return
 
     def verify_plan(self):
         """Verifies plan format"""
@@ -54,11 +47,11 @@ class Converter():
         """Converts plan to mavlink"""
 
         mav = MAVlink(self.qgc_plan, LATEST_VERSION, takeoff=True)
-        mav.main()
         self.write_to_disk(mav.f_mavlink)
 
     def write_to_disk(self, mavlink):
-
+        """Writes object down to disk"""
+        #TODO: add try/except
         with open(self.out, "w+") as f:
             for line in mavlink:
                 f.write(str(line))
@@ -67,19 +60,12 @@ class Converter():
 class MAVlink():
     def __init__(self, plan, version, takeoff):
         self.plan = plan
-
         self.header = "QGC WPL {}".format(version)
         self.takeoff = [0, 1, 3, TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0] if takeoff == True else None # TODO, do this with listcomp
         self.mission_items = self.populate()
-
-        self.mavlink = [self.header, *self.takeoff, *self.mission_items] 
         self.f_mavlink = self.format_mavlink()
-
-    def main(self):
-        print(self.f_mavlink)
     
     def format_mavlink(self):
-        
         f_mavlink = []
 
         f_mavlink.append(self.header)
@@ -108,6 +94,7 @@ class MAVlink():
     def tab_it(self, target):
         """Insert tab between every item in target"""
         return "\t".join(str(t) for t in target)
+
 
 if __name__ == "__main__":
     args = parse_args()
