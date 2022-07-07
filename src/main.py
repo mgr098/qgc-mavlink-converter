@@ -49,11 +49,6 @@ class Converter():
             logging.error("Can't open specified file")
 
         #TODO: check if its a plan, and that its not empty?
-    
-    def tab_it(self, line):
-        char = "\t"
-        tabs = char.join(str(v) for v in line)
-        return tabs
 
     def convert_to_mavlink(self):
         """Converts plan to mavlink"""
@@ -61,59 +56,12 @@ class Converter():
         mav = MAVlink(self.qgc_plan, LATEST_VERSION, takeoff=True)
         mav.main()
         self.write_to_disk(mav.f_mavlink)
-        return 
 
-        # mav = []
-        # mav.append("QGC WPL" + LATEST_VERSION) # Add meta data
+    def write_to_disk(self, mavlink):
 
-        # # Add takeoff first
-        # counter = 0
-        # cmd_line = [counter, 1, 3, TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0] # TODO, do this with listcomp
-
-        # # TODO: Move this to a class
-        # for i, item in enumerate(self.qgc_plan["mission"]["items"]):
-        #     params = [i for i in item["params"]]
-        #     self.line = [i + 1, 0, item["frame"], item["command"], *params, 1 if item["autoContinue"] else 0] # TODO: do this with listcomp
-        #     self.lines.append(self.line)
-        
-        # self.write_to_disk(mav, cmd_line)
-
-    def write_to_disk(self, mav):
-        #TODO: Move this to a function 
-
-
-
-        # for i in self.lines:
-        #     i.append("\n")
-        
-        
-        # print(self.lines)
-        # skr = []
-        # for i in self.lines:
-        #     tabbed = self.tab_it(i)
-        #     for j in tabbed:
-        #         skr.append(j)
-        # o = [*mav, self.tab_it(cmd_line)]
-                
-        # for i in self.lines:
-        #     tabbed = self.tab_it(i)
-        #     o.append(tabbed)
-
-        # print(o)
-
-        with open("output.mavlink", "w+") as f:
-            # f.write(str(mav))
-            # f.write("\n")
-
-            # cmd_line = self.tab_it(cmd_line)
-            # f.write(cmd_line)
-
-            # for line in self.lines:
-            #     f.write("\n")
-            #     f.write(self.tab_it(line))
-            for i in mav:
-                f.write(str(i))
-                # f.write("\n")
+        with open(self.out, "w+") as f:
+            for line in mavlink:
+                f.write(str(line))
             f.close()
 
 class MAVlink():
