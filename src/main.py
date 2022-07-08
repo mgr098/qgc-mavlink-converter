@@ -6,6 +6,7 @@ from constants import LATEST_VERSION, TAKEOFF, DEFAULT_FILE_NAME
 logger=logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
+# Parses input arguments
 def parse_args():
     parser = argparse.ArgumentParser(description="Convert QGC .plan to .mavlink format")
 
@@ -76,6 +77,22 @@ class Mav():
         self.mission_items = self.convert()
         self.file = self.format_items()
     
+    def convert(self):
+        """Convert plan according to MAVlink"""
+        mission_items = []
+
+        for i, item in enumerate(self.plan["mission"]["items"]):
+            if item["type"] == "SimpleItem":
+                params = [i for i in item["params"]] 
+                mission_item = [i + 1, 0, item["frame"], item["command"], *params, 
+                                1 if item ["autoContinue"] else 0]
+
+                mission_items.append(mission_item)
+            else:
+                logging.warning("Cannot convert type: complexItem")
+        
+        return mission_items
+
     def format_items(self):
         mav_file = []
         mav_file.append(self.header)
@@ -93,22 +110,6 @@ class Mav():
             mav_file.append(self.insert_tabs(line))
 
         return mav_file
-
-    def convert(self):
-        """Convert plan according to MAVlink"""
-        mission_items = []
-
-        for i, item in enumerate(self.plan["mission"]["items"]):
-            if item["type"] == "SimpleItem":
-                params = [i for i in item["params"]] 
-                mission_item = [i + 1, 0, item["frame"], item["command"], *params, 
-                                1 if item ["autoContinue"] else 0]
-
-                mission_items.append(mission_item)
-            else:
-                logging.warning("Cannot convert type: complexItem")
-        
-        return mission_items
 
     def insert_tabs(self, target):
         """Insert tab between every item in target"""
