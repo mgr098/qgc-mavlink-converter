@@ -19,12 +19,12 @@ python3 main.py /path/to/qgc.plan
 ```
 
 <details>
-<summary> To view arguments</summary>
+<summary> View argument help </summary>
 <br>
 
 ```
 python3 main.py --help
-```
+
 Output
 ```
 usage: main.py [-h] [--out OUT] [--version VERSION]
@@ -45,14 +45,14 @@ optional arguments:
 Example usecase of optional arguments
 
 ```
-python3 main.py qgc.plan --out mission.mavlink --version 120 --takeoff True
+python3 main.py qgc.plan --out output.mavlink --version 120 --takeoff True
 ```
 </details>
 
 
 ## Limitations 🚨
 
-Does not support item types "complexItem" because they do not have a standard .mavlink format.
+Does not support conversion of item type "complexItem" because it does not have a standard .mavlink format.
 
 ## About 📝
 

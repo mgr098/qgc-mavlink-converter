@@ -5,9 +5,9 @@ This folder contains Python scripts that can convert QGC JSON .plan file to .mav
 ## Folder Structure 🗃️
 ```
 └── Src
-    ├── constants.py            Constants used by main.py
-    ├── main.py                 Converts JSON .plan to .mavlink
     ├── README.md               This README
+    ├── main.py                 Converts JSON .plan to .mavlink
+    ├── constants.py            Constants used by main.py
     └── upload_mavlink.py       Uploads .mavlink to drone and starts it    
 ```
 
@@ -27,7 +27,7 @@ python3 main.py /path/to/qgc.plan
 ```
 
 <details>
-<summary> To view arguments</summary>
+<summary> View argument help </summary>
 <br>
 
 ```
@@ -53,7 +53,7 @@ optional arguments:
 Example usecase of optional arguments
 
 ```
-python3 main.py qgc.plan --out mission.mavlink --version 120 --takeoff True
+python3 main.py qgc.plan --out output.mavlink --version 120 --takeoff True
 ```
 </details>
 
@@ -67,7 +67,7 @@ python3 main.py qgc.plan --out mission.mavlink --version 120 --takeoff True
 
 To upload the .mavlink file to the drone and start the mission, run this in your terminal
 ```
-python3 upload_mavlink.py mission.mavlink
+python3 upload_mavlink.py output.mavlink
 ```
 
 
