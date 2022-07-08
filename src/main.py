@@ -3,13 +3,10 @@ import logging
 import argparse
 from constants import LATEST_VERSION, TAKEOFF, DEFAULT_FILE_NAME
 
-# TODO: try without takeoff, try many different plans to test
-
-# logger=logging.getLogger()
-# logger.setLevel(logging.DEBUG)
+logger=logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 def parse_args():
-    #TODO: create better names
     parser = argparse.ArgumentParser(description="Convert QGC .plan to .mavlink format")
 
     parser.add_argument(
@@ -24,6 +21,11 @@ def parse_args():
     return parser.parse_args()
 
 
+"""
+This class manages the .plan conversion by 
+loading the .plan, initializing the mav object
+and writing the formated mav object to a new file
+"""
 class Converter():
     def __init__(self, filepath, out, takeoff, version):
         self.filepath = filepath 
@@ -36,11 +38,12 @@ class Converter():
         self.verify_format()
         mav = Mav(self.plan, self.version, self.takeoff)
         self.write_to_disk(mav.file)
+
         print("Successfully converted {} to {}".format(self.filepath, self.out))
 
     def verify_format(self):
         """Verifies plan format"""
-        #TODO: check if its a plan, and that its not empty?
+        #TODO: check if its a .plan, and that its not empty
         try:
             with open(self.filepath) as f:
                 self.plan = json.load(f)
@@ -60,7 +63,10 @@ class Converter():
         except:
             logging.exception("Unexpected error, could not append MAVlink object to file")
 
-
+"""
+This class converts a JSON .plan file to a 
+formated mavlink file
+"""
 class Mav():
     def __init__(self, plan, version, takeoff):
         self.plan = plan
@@ -74,7 +80,10 @@ class Mav():
         mav_file = []
         mav_file.append(self.header)
 
-        if self.takeoff:
+        # Not sure if this is needed.
+        # However, parrot drones need to takeoff
+        # before other drone functions are activated
+        if self.takeoff: 
             self.takeoff = [0, 1, 3, TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0]
             mav_file.append("\n")
             mav_file.append(self.insert_tabs(self.takeoff))
@@ -87,15 +96,17 @@ class Mav():
 
     def convert(self):
         """Convert plan according to MAVlink"""
-        #TODO: rewrite maybe?
         mission_items = []
 
         for i, item in enumerate(self.plan["mission"]["items"]):
-            params = [i for i in item["params"]] 
-            mission_item = [i + 1, 0, item["frame"], item["command"], *params, 
-                            1 if item ["autoContinue"] else 0]
+            if item["type"] == "SimpleItem":
+                params = [i for i in item["params"]] 
+                mission_item = [i + 1, 0, item["frame"], item["command"], *params, 
+                                1 if item ["autoContinue"] else 0]
 
-            mission_items.append(mission_item)
+                mission_items.append(mission_item)
+            else:
+                logging.warning("Cannot convert type: complexItem")
         
         return mission_items
 
