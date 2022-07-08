@@ -18,13 +18,42 @@ In your terminal run
 python3 main.py /path/to/qgc.plan
 ```
 
+<details>
+<summary> To view arguments</summary>
+<br>
+
+```
+python3 main.py --help
+```
+Output
+```
+usage: main.py [-h] [--out OUT] [--version VERSION]
+               [--takeoff TAKEOFF]
+               filepath
+
+Convert QGC .plan to .mavlink format
+
+positional arguments:
+  filepath           Usage: python3 main.py </path/to/file/>
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --out OUT          MAVlink filename
+  --version VERSION  MAVlink version
+  --takeoff TAKEOFF  Add takeoff at start of mavlink
+```
+Example usecase of optional arguments
+
+```
+python3 main.py qgc.plan --out mission.mavlink --version 120 --takeoff True
+```
+</details>
+
+
+## Limitations 🚨
+
+Does not support item types "complexItem" because they do not have a standard .mavlink format.
 
 ## About 📝
 
 This project was created in order to upload QGC plans to the ANAFI AI drone. It also contains a script that uploads and starts an AirSDK mission on a Parrot drone using a mavlink file. Read the [documentation](./src/README.md) on how to to run both scripts. 
-
-## Contributing ✍️
-## Acknowledgments
-## Related
-* [Parrot Guide](https://github.com/mgr098/parrot-guide) - An unofficial guide to the Parrot Ecosystem
-* [Simulated Drone Flight](https://github.com/mgr098/simulated-drone-flight) - A Python script that remotely controls a simulated ANAFI AI drone in the Parrot Sphinx simulator
