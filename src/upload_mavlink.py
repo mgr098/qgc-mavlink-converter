@@ -1,3 +1,4 @@
+import sys
 import olympe
 from olympe.messages.common.Mavlink import Start
 from olympe.messages.common.MavlinkState import (
@@ -22,8 +23,10 @@ headers = {
 drone = olympe.Drone(drone_ip)
 drone.connect()
 
+filepath = sys.argv[1]
+
 # Upload mavlink file
-with open("mavtest.mavlink", "rb") as data:
+with open(filepath, "rb") as data:
     resp = requests.put(
         url=os.path.join("http://", drone_ip, "api/v1/upload", "flightplan"),
         headers=headers,
