@@ -8,7 +8,7 @@ from olympe.messages.common.MavlinkState import (
 import requests
 import os
 
-#TODO: credit dude from dev forum
+#TODO: Add arg parser
 olympe.log.update_config({"loggers": {"olympe": {"level": "ERROR"}}})
 
 drone_ip = "10.202.0.1"
@@ -21,6 +21,7 @@ headers = {
 
 drone = olympe.Drone(drone_ip)
 drone.connect()
+
 # Upload mavlink file
 with open("mavtest.mavlink", "rb") as data:
     resp = requests.put(
@@ -29,20 +30,9 @@ with open("mavtest.mavlink", "rb") as data:
         data=data,
     )
 
-print(resp)
-
 # Start flightplan
 expectation = drone(
     Start(resp.json(), type="flightPlan")
-    # >> MissionItemExecuted(idx=0.0) 
-    # >> MissionItemExecuted(idx=1.0)
-    # >> MissionItemExecuted(idx=2.0)
-    # >> MissionItemExecuted(idx=3.0)
-    # >> MissionItemExecuted(idx=4.0)
-    # >> MissionItemExecuted(idx=5.0)
-    # >> MissionItemExecuted(idx=6.0) 
-    # >> MissionItemExecuted(idx=7.0) 
-    # >> MavlinkFilePlayingStateChanged(state="stopped")
 ).wait(_timeout=200)
 
 assert expectation
