@@ -1,28 +1,29 @@
-# QGroundControl Plan to MAVlink Converter
+# QGroundControl Plan to MAVlink Converter ♻️
 
-Convert QGroundControl JSON .plan file to Parrot compatible MAVlink file used for AirSDK FlightPlans. 
+Convert QGroundControl (QGC) JSON .plan file to Parrot compatible MAVlink file used for AirSDK FlightPlans. 
 
-## Requirements
-* python3
+## Requirements ✔
+
+* [python3](https://www.python.org/)
 
 ## Usage
 
-clone the repo
+Clone the repository and navigate to /src. In your terminal run
 
 ```
-python3 convert.py /path-to-qgc-plan/ /location/
+python3 main.py /path/to/qgc.plan
 ```
 
 ## About
 
-The scripts adds a takeoff before anything else, because the drone wont really do anything befor you do so. Unsure how mavlink and qgc works? check out the docs, or check out my guide.
+This Python script was created in order to upload QGC plans to the ANAFI AI drone. It also contains a file that uploads and runs a .mavlink file on a Parrot drone. Check out /src/README.md to see information on how to run both scripts with optional arguments. 
 
 ## TODO
 
-* convert the file to .mavlink
-    * verify input arguments
-    * verify file and file format
-    * verify compatible to parrot
+* verify plan commands are compatible to parrot
+* test with multiple plans
 * add script that runs this on a simulator
 
-## Contributing
+## Contributing 
+
+## Acknowledgments
