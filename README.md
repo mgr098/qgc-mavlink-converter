@@ -18,13 +18,14 @@ In your terminal run
 python3 main.py /path/to/qgc.plan
 ```
 
+
 <details>
-<summary> View argument help </summary>
+<summary> View optional arguments </summary>
 <br>
 
 ```
 python3 main.py --help
-
+```
 Output
 ```
 usage: main.py [-h] [--out OUT] [--version VERSION]
@@ -48,7 +49,6 @@ Example usecase of optional arguments
 python3 main.py qgc.plan --out output.mavlink --version 120 --takeoff True
 ```
 </details>
-
 
 ## Limitations 🚨
 
