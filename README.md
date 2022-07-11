@@ -1,5 +1,5 @@
 # QGroundControl Plan to MAVlink Converter ♻️
-Convert [QGroundControl (QGC)](http://qgroundcontrol.com/) JSON .plan file to [Parrot compatible MAVlink](https://developer.parrot.com/docs/mavlink-flightplan/overview.html) file used for [AirSDK Flight mission](https://developer.parrot.com/docs/airsdk/general/overview.html). 
+Convert [QGroundControl (QGC)](http://qgroundcontrol.com/) JSON [.plan file]() to [Parrot compatible MAVlink](https://developer.parrot.com/docs/mavlink-flightplan/overview.html) file used for [AirSDK Flight mission](https://developer.parrot.com/docs/airsdk/general/overview.html). 
 
 ## Requirements ✔
 
@@ -10,7 +10,7 @@ Convert [QGroundControl (QGC)](http://qgroundcontrol.com/) JSON .plan file to [P
 Clone the project and navigate to the /src folder
 ```
 git clone https://github.com/mgr098/qgc-mavlink-converter.git
-cd src
+cd qgc-mavlink-converter/src
 ```
 ## Usage 🖥
 In your terminal run
@@ -52,7 +52,7 @@ python3 main.py qgc.plan --out output.mavlink --version 120 --takeoff True
 
 ## Limitations 🚨
 
-Does not support conversion of item type "complexItem" because it does not have a standard .mavlink format.
+The converter does not support conversion of item type "complexItem" because it does not have a standard .mavlink format.
 
 ## About 📝
 
