@@ -1,5 +1,5 @@
 # QGroundControl Plan to MAVlink Converter ♻️
-Convert [QGroundControl (QGC)](http://qgroundcontrol.com/) JSON [.plan file]() to [Parrot compatible MAVlink](https://developer.parrot.com/docs/mavlink-flightplan/overview.html) file used for [AirSDK Flight mission](https://developer.parrot.com/docs/airsdk/general/overview.html). 
+Convert [QGroundControl (QGC)](http://qgroundcontrol.com/) JSON [.plan file](https://dev.qgroundcontrol.com/master/en/file_formats/plan.html) to [Parrot compatible MAVlink](https://developer.parrot.com/docs/mavlink-flightplan/overview.html) file used for [AirSDK Flight missions](https://developer.parrot.com/docs/airsdk/general/overview.html). 
 
 ## Requirements ✔
 
