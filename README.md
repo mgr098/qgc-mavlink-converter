@@ -52,7 +52,7 @@ python3 main.py qgc.plan --out output.mavlink --version 120 --takeoff True
 
 ## Limitations 🚨
 
-The converter does not support conversion of item type "complexItem" because it does not have a standard .mavlink format.
+The converter does not support conversion of item type "complexItem" because it does not have a MAVlink standard. This means that the converter can't convert qgc plans containing: geofence, rally points, parameters etc. There is a discussion about standardising file formats in [Issue #989](https://github.com/mavlink/mavlink/issues/989) and I've opened up an an issue to support the conversion in [Issue #10342](https://github.com/mavlink/qgroundcontrol/issues/10342#issuecomment-1182683176).
 
 ## About 📝
 
