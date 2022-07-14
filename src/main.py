@@ -1,8 +1,7 @@
 import json
 import logging
 import argparse
-
-from constants import LATEST_VERSION, TAKEOFF, DEFAULT_FILE_NAME
+from constants import LATEST_VERSION, TAKEOFF, DEFAULT_FILE_NAME, WAYPOINT
 
 logger=logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -87,17 +86,16 @@ class Mav():
                 params = ["Nan" if i is None else i for i in item["params"]]
 
                 mission_item = [
-                    i + 1, 1 if i == 0 else 0, item["frame"], 
+                    i + 1, 0, 0, item["frame"], 
                     item["command"], *params, 1 if item ["autoContinue"] else 0
                 ]
 
                 mission_items.append(mission_item)
             else:
                 #NOTE: this is a problem
-                logging.warning("Cannot convert type: complexItem")
+                logging.ERROR("Cannot convert type: complexItem")
         
-
-        return mission_items
+        return self.set_current_wp(mission_items)
 
     def format_items(self):
         mav_file = []
@@ -116,6 +114,16 @@ class Mav():
             mav_file.append(self.insert_tabs(line))
 
         return mav_file
+    
+    def set_current_wp(self, mission_items):
+        """Finds and sets current waypoint flag"""
+
+        for item in mission_items:
+            if item[4] in (WAYPOINT, TAKEOFF):
+                item[1] = 1
+                break
+        
+        return mission_items
 
     def insert_tabs(self, target):
         """Insert tab between every item in target"""
