@@ -15,7 +15,7 @@ cd qgc-mavlink-converter/src
 ## Usage 🖥
 In your terminal run
 ```
-python3 main.py /path/to/qgc.plan
+python3 convert.py /path/to/qgc.plan
 ```
 
 
@@ -24,18 +24,18 @@ python3 main.py /path/to/qgc.plan
 <br>
 
 ```
-python3 main.py --help
+python3 convert.py --help
 ```
 Output
 ```
-usage: main.py [-h] [--out OUT] [--version VERSION]
+usage: convert.py [-h] [--out OUT] [--version VERSION]
                [--takeoff TAKEOFF]
                filepath
 
 Convert QGC .plan to .mavlink format
 
 positional arguments:
-  filepath           Usage: python3 main.py </path/to/file/>
+  filepath           Usage: python3 convert.py </path/to/file/>
 
 optional arguments:
   -h, --help         show this help message and exit
@@ -46,7 +46,7 @@ optional arguments:
 Example usecase of optional arguments
 
 ```
-python3 main.py qgc.plan --out output.mavlink --version 120 --takeoff True
+python3 convert.py qgc.plan --out output.mavlink --version 120 --takeoff True
 ```
 </details>
 
