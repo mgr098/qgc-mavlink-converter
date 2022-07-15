@@ -1,3 +1,4 @@
+import sys
 import json
 import logging
 import argparse
@@ -92,8 +93,8 @@ class Mav():
 
                 mission_items.append(mission_item)
             else:
-                #NOTE: this is a problem
-                logging.ERROR("Cannot convert type: complexItem")
+                logging.exception("Cannot convert type: complexItem")
+                sys.exit(0)
         
         return self.set_current_wp(mission_items)
 
