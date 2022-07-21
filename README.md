@@ -54,6 +54,10 @@ python3 convert.py qgc.plan --out output.mavlink --version 120 --takeoff True
 
 The converter does not support conversion of item type "complexItem" because it does not have a MAVlink standard. This means that the converter can't convert qgc plans containing: geofence, rally points, parameters etc. There is a discussion about standardising file formats in [Issue #989](https://github.com/mavlink/mavlink/issues/989) and I've opened up an an issue to support the conversion in [Issue #10342](https://github.com/mavlink/qgroundcontrol/issues/10342#issuecomment-1182683176).
 
+It seems like GroundSDK flightplans also require a Mavlink WAYPOINT item in order to run. The converter will therefore give a warning if this is not included. However, TAKEOFF is not required.
+
 ## About 📝
 
 This project was created in order to upload QGC plans to the ANAFI AI drone. It also contains a script that uploads and starts an AirSDK mission on a Parrot drone using a mavlink file. Read the [documentation](./src/README.md) on how to to run both scripts. 
+
+If you want to learn how to use Mavlink Flightplans on a real mission, check out the [ANAFI Ai Survival Kit](https://github.com/mgr098/anafi-ai-survival-kit). This project contains scripts and guides that can help you when you're testing in the field.
