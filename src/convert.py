@@ -2,14 +2,17 @@ import sys
 import json
 import logging
 import argparse
-from constants import LATEST_VERSION, TAKEOFF, DEFAULT_FILE_NAME, WAYPOINT
 
-logger=logging.getLogger()
+from config import LATEST_VERSION, DEFAULT_FILE_NAME, TAKEOFF, WAYPOINT
+
+logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
+
 
 # Parses input arguments
 def parse_args():
-    parser = argparse.ArgumentParser(description="Convert QGC .plan to .mavlink format")
+    parser = argparse.ArgumentParser(
+        description="Convert QGC .plan to .mavlink format")
 
     parser.add_argument(
         "filepath", type=str, help="Usage: python3 main.py </path/to/file/>")
@@ -30,7 +33,7 @@ and writing the formated mav object to a new file
 """
 class Converter():
     def __init__(self, filepath, out, takeoff, version):
-        self.filepath = filepath 
+        self.filepath = filepath
         self.out = out
         self.takeoff = takeoff
         self.version = version
@@ -45,7 +48,7 @@ class Converter():
 
     def verify_format(self):
         """Verifies plan format"""
-        #TODO: check if its a .plan, and that its not empty
+        # TODO: check if its a .plan, and that its not empty
         try:
             with open(self.filepath) as f:
                 self.plan = json.load(f)
@@ -63,7 +66,9 @@ class Converter():
                     f.write(str(line))
                 f.close()
         except:
-            logging.exception("Unexpected error, could not append MAVlink object to file")
+            logging.exception(
+                "Unexpected error, could not append MAVlink object to file")
+
 
 """
 This class converts a JSON .plan file to a 
@@ -74,29 +79,28 @@ class Mav():
         self.plan = plan
         self.header = "QGC WPL {}".format(version)
         self.takeoff = takeoff
-        
+
         self.mission_items = self.convert()
         self.file = self.format_items()
-    
+
     def convert(self):
-        """Convert plan according to MAVlink"""
-        mission_items = []
+        """Convert plan to mavlink plaintext file format"""
 
-        for i, item in enumerate(self.plan["mission"]["items"]):
-            if item["type"] == "SimpleItem":
-                params = ["Nan" if i is None else i for i in item["params"]]
+        mav_items = []
+        plan_items = self.plan["mission"]["items"]
 
-                mission_item = [
-                    i + 1, 0, 0, item["frame"], 
-                    item["command"], *params, 1 if item ["autoContinue"] else 0
-                ]
+        for i, item in enumerate(plan_items):
+            frame = item["frame"]
+            command = item["command"]
 
-                mission_items.append(mission_item)
-            else:
-                logging.exception("Cannot convert type: complexItem")
-                sys.exit(0)
-        
-        return self.set_current_wp(mission_items)
+            auto_continue = 1 if item["autoContinue"] else 0
+            parameters = ["Nan" if i is None else "{:.6f}".format(
+                i) for i in item["params"]]
+
+            mav_item = [i, 0, frame, command, *parameters, auto_continue]
+            mav_items.append(mav_item)
+
+        return self.set_current_wp(mav_items)
 
     def format_items(self):
         mav_file = []
@@ -105,7 +109,7 @@ class Mav():
         # Not sure if this is needed.
         # However, parrot drones need to takeoff
         # before other drone functions are activated
-        if self.takeoff: 
+        if self.takeoff:
             self.takeoff = [0, 1, 3, TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0]
             mav_file.append("\n")
             mav_file.append(self.insert_tabs(self.takeoff))
@@ -115,20 +119,21 @@ class Mav():
             mav_file.append(self.insert_tabs(line))
 
         return mav_file
-    
+
     def set_current_wp(self, mission_items):
         """Finds and sets current waypoint flag"""
 
         for item in mission_items:
-            if item[4] in (WAYPOINT, TAKEOFF):
+            if item[3] is WAYPOINT or item[3] is TAKEOFF:
                 item[1] = 1
                 break
-        
+
         return mission_items
 
     def insert_tabs(self, target):
         """Insert tab between every item in target"""
-        return "\t".join(str(t) for t in target)
+
+        return"\t\t".join(str(t) for t in target)
 
 
 if __name__ == "__main__":
