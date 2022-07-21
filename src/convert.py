@@ -122,11 +122,16 @@ class Mav():
 
     def set_current_wp(self, mission_items):
         """Finds and sets current waypoint flag"""
-
+        flag = 0
         for item in mission_items:
-            if item[3] is WAYPOINT or item[3] is TAKEOFF:
+            if item[3] is TAKEOFF and flag == 0:
                 item[1] = 1
-                break
+                flag = 1
+            
+            if item[3] is WAYPOINT:
+                return mission_items
+
+        logging.warning("No WAYPOINT detected! GroundSDK Flightplans require WAYPOINT to run flightplans")
 
         return mission_items
 
