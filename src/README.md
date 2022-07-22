@@ -7,7 +7,7 @@ This folder contains Python scripts that can convert QGC JSON .plan file to .mav
 └── Src
     ├── README.md               This README
     ├── convert.py              Converts JSON .plan to .mavlink
-    ├── constants.py            Constants used by convert.py
+    ├── config.py               Constants used by convert.py
     └── upload.py               Uploads .mavlink to drone and starts it    
 ```
 
