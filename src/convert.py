@@ -102,6 +102,21 @@ class Mav():
 
         return self.set_current_wp(mav_items)
 
+    def set_current_wp(self, mission_items):
+        """Finds and sets current waypoint flag"""
+        flag = 0
+        for item in mission_items:
+            if item[3] is TAKEOFF and flag == 0:
+                item[1] = 1
+                flag = 1
+            
+            if item[3] is WAYPOINT:
+                return mission_items
+
+        logging.warning("No WAYPOINT detected! GroundSDK Flightplans require WAYPOINT to run flightplans")
+
+        return mission_items
+
     def format_items(self):
         mav_file = []
         mav_file.append(self.header)
@@ -119,21 +134,6 @@ class Mav():
             mav_file.append(self.insert_tabs(line))
 
         return mav_file
-
-    def set_current_wp(self, mission_items):
-        """Finds and sets current waypoint flag"""
-        flag = 0
-        for item in mission_items:
-            if item[3] is TAKEOFF and flag == 0:
-                item[1] = 1
-                flag = 1
-            
-            if item[3] is WAYPOINT:
-                return mission_items
-
-        logging.warning("No WAYPOINT detected! GroundSDK Flightplans require WAYPOINT to run flightplans")
-
-        return mission_items
 
     def insert_tabs(self, target):
         """Insert tab between every item in target"""
