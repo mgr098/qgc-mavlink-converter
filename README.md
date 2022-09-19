@@ -12,12 +12,19 @@ Clone the project and navigate to the /src folder
 git clone https://github.com/mgr098/qgc-mavlink-converter.git
 cd qgc-mavlink-converter/src
 ```
+
+If you haven't created a qgc plan do so with [QGroundControl](http://qgroundcontrol.com/).
+
 ## Usage 🖥
+
+
 In your terminal run
+
 ```
 python3 convert.py /path/to/qgc.plan
 ```
 
+This converts your qgc.plan to a mavlink plan.
 
 <details>
 <summary> View optional arguments </summary>
